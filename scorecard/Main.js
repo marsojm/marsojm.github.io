@@ -8057,6 +8057,12 @@ var _user$project$Main$cellStyle = F3(
 			return '';
 		}
 	});
+var _user$project$Main$toStringScore = function (score) {
+	return (_elm_lang$core$Native_Utils.cmp(score, 0) > -1) ? A2(
+		_elm_lang$core$Basics_ops['++'],
+		'+',
+		_elm_lang$core$Basics$toString(score)) : _elm_lang$core$Basics$toString(score);
+};
 var _user$project$Main$playerNameCell = function (player) {
 	return A2(
 		_elm_lang$html$Html$td,
@@ -8078,19 +8084,32 @@ var _user$project$Main$calculateScoreForThrow = F2(
 				holes));
 		var _p2 = hole;
 		if (_p2.ctor === 'Just') {
-			return throwRes.$throws - _p2._0.par;
+			return {ctor: '_Tuple2', _0: throwRes.$throws, _1: throwRes.$throws - _p2._0.par};
 		} else {
-			return 0;
+			return {ctor: '_Tuple2', _0: 0, _1: 0};
 		}
+	});
+var _user$project$Main$addPair = F2(
+	function (p1, p2) {
+		var _p3 = p2;
+		var b1 = _p3._0;
+		var b2 = _p3._1;
+		var _p4 = p1;
+		var a1 = _p4._0;
+		var a2 = _p4._1;
+		return {ctor: '_Tuple2', _0: a1 + b1, _1: a2 + b2};
 	});
 var _user$project$Main$calculateTotalsRec = F3(
 	function (acc, results, holes) {
 		calculateTotalsRec:
 		while (true) {
-			var _p3 = results;
-			if (_p3.ctor === '::') {
-				var _v4 = acc + A2(_user$project$Main$calculateScoreForThrow, _p3._0, holes),
-					_v5 = _p3._1,
+			var _p5 = results;
+			if (_p5.ctor === '::') {
+				var _v4 = A2(
+					_user$project$Main$addPair,
+					acc,
+					A2(_user$project$Main$calculateScoreForThrow, _p5._0, holes)),
+					_v5 = _p5._1,
 					_v6 = holes;
 				acc = _v4;
 				results = _v5;
@@ -8104,8 +8123,27 @@ var _user$project$Main$calculateTotalsRec = F3(
 var _user$project$Main$calculateTotal = F2(
 	function (player, holes) {
 		var results = player.results;
-		return A3(_user$project$Main$calculateTotalsRec, 0, results, holes);
+		return A3(
+			_user$project$Main$calculateTotalsRec,
+			{ctor: '_Tuple2', _0: 0, _1: 0},
+			results,
+			holes);
 	});
+var _user$project$Main$totalScoreString = function (score) {
+	var _p6 = score;
+	var a = _p6._0;
+	var b = _p6._1;
+	return A2(
+		_elm_lang$core$Basics_ops['++'],
+		_elm_lang$core$Basics$toString(a),
+		A2(
+			_elm_lang$core$Basics_ops['++'],
+			' (',
+			A2(
+				_elm_lang$core$Basics_ops['++'],
+				_user$project$Main$toStringScore(b),
+				')')));
+};
 var _user$project$Main$renderHoleNumbers = function (model) {
 	return A2(
 		_elm_lang$html$Html$tr,
@@ -8228,17 +8266,17 @@ var _user$project$Main$scoreForHole = F2(
 				return _elm_lang$core$Native_Utils.eq(r.holeId, hole.order);
 			},
 			player.results);
-		var _p4 = res;
-		if (_p4.ctor === '::') {
-			return _elm_lang$core$Basics$toString(_p4._0.$throws);
+		var _p7 = res;
+		if (_p7.ctor === '::') {
+			return _elm_lang$core$Basics$toString(_p7._0.$throws);
 		} else {
 			return '-';
 		}
 	});
 var _user$project$Main$handleToggleEdit = F3(
 	function (model, player, hole) {
-		var _p5 = model.scoreToEdit;
-		if (_p5.ctor === 'Nothing') {
+		var _p8 = model.scoreToEdit;
+		if (_p8.ctor === 'Nothing') {
 			return _elm_lang$core$Native_Utils.update(
 				model,
 				{
@@ -8247,7 +8285,7 @@ var _user$project$Main$handleToggleEdit = F3(
 					error: _elm_lang$core$Maybe$Nothing
 				});
 		} else {
-			return (_elm_lang$core$Native_Utils.eq(_p5._0._0, player) && _elm_lang$core$Native_Utils.eq(_p5._0._1, hole)) ? _elm_lang$core$Native_Utils.update(
+			return (_elm_lang$core$Native_Utils.eq(_p8._0._0, player) && _elm_lang$core$Native_Utils.eq(_p8._0._1, hole)) ? _elm_lang$core$Native_Utils.update(
 				model,
 				{scoreToEdit: _elm_lang$core$Maybe$Nothing, error: _elm_lang$core$Maybe$Nothing}) : _elm_lang$core$Native_Utils.update(
 				model,
@@ -8310,28 +8348,28 @@ var _user$project$Main$ThrowResult = F2(
 	});
 var _user$project$Main$updatePlayerScore = F2(
 	function (model, val) {
-		var _p6 = model.scoreToEdit;
-		if ((_p6.ctor === 'Just') && (_p6._0.ctor === '_Tuple2')) {
-			var _p8 = _p6._0._0;
-			var _p7 = _p6._0._1;
+		var _p9 = model.scoreToEdit;
+		if ((_p9.ctor === 'Just') && (_p9._0.ctor === '_Tuple2')) {
+			var _p11 = _p9._0._0;
+			var _p10 = _p9._0._1;
 			var throwResults = A2(
 				_elm_lang$core$List$filter,
 				function (throwResult) {
-					return !_elm_lang$core$Native_Utils.eq(throwResult.holeId, _p7.order);
+					return !_elm_lang$core$Native_Utils.eq(throwResult.holeId, _p10.order);
 				},
-				_p8.results);
+				_p11.results);
 			var oldPlayers = A2(
 				_elm_lang$core$List$filter,
 				function (p) {
-					return !_elm_lang$core$Native_Utils.eq(p.id, _p8.id);
+					return !_elm_lang$core$Native_Utils.eq(p.id, _p11.id);
 				},
 				model.players);
 			var newPlayer = _elm_lang$core$Native_Utils.update(
-				_p8,
+				_p11,
 				{
 					results: A2(
 						_elm_lang$core$List_ops['::'],
-						A2(_user$project$Main$ThrowResult, _p7.order, val),
+						A2(_user$project$Main$ThrowResult, _p10.order, val),
 						throwResults)
 				});
 			return A2(_elm_lang$core$List_ops['::'], newPlayer, oldPlayers);
@@ -8352,14 +8390,14 @@ var _user$project$Main$Hole = F2(
 		return {order: a, par: b};
 	});
 var _user$project$Main$updateParHolesToAdd = function (model) {
-	var _p9 = _elm_lang$core$String$toInt(model.parForHole);
-	if (_p9.ctor === 'Ok') {
-		var _p10 = _p9._0;
-		if (_elm_lang$core$Native_Utils.cmp(_p10, 0) > 0) {
+	var _p12 = _elm_lang$core$String$toInt(model.parForHole);
+	if (_p12.ctor === 'Ok') {
+		var _p13 = _p12._0;
+		if (_elm_lang$core$Native_Utils.cmp(_p13, 0) > 0) {
 			var newHole = A2(
 				_user$project$Main$Hole,
 				_user$project$Main$nextIdForHole(model),
-				_p10);
+				_p13);
 			var oldHoles = model.holes;
 			return _elm_lang$core$Native_Utils.update(
 				model,
@@ -8385,18 +8423,18 @@ var _user$project$Main$updateParHolesToAdd = function (model) {
 };
 var _user$project$Main$update = F2(
 	function (msg, model) {
-		var _p11 = msg;
-		switch (_p11.ctor) {
+		var _p14 = msg;
+		switch (_p14.ctor) {
 			case 'AddHole':
 				return _user$project$Main$updateParHolesToAdd(model);
 			case 'InputCourseName':
 				return _elm_lang$core$Native_Utils.update(
 					model,
-					{nameCandidate: _p11._0});
+					{nameCandidate: _p14._0});
 			case 'InputPar':
 				return _elm_lang$core$Native_Utils.update(
 					model,
-					{parForHole: _p11._0});
+					{parForHole: _p14._0});
 			case 'CreateCourse':
 				return ((_elm_lang$core$Native_Utils.cmp(
 					_elm_lang$core$String$length(model.nameCandidate),
@@ -8419,26 +8457,26 @@ var _user$project$Main$update = F2(
 						error: _elm_lang$core$Maybe$Just('Course must have a name and at least one hole!')
 					});
 			case 'ToggleEdit':
-				return A3(_user$project$Main$handleToggleEdit, model, _p11._0, _p11._1);
+				return A3(_user$project$Main$handleToggleEdit, model, _p14._0, _p14._1);
 			case 'InputScoreToEdit':
 				return _elm_lang$core$Native_Utils.update(
 					model,
-					{newScoreValue: _p11._0});
+					{newScoreValue: _p14._0});
 			case 'SaveScore':
 				if (_elm_lang$core$Native_Utils.eq(model.newScoreValue, '') || _elm_lang$core$Native_Utils.eq(model.newScoreValue, '-')) {
 					return _elm_lang$core$Native_Utils.update(
 						model,
 						{scoreToEdit: _elm_lang$core$Maybe$Nothing, error: _elm_lang$core$Maybe$Nothing});
 				} else {
-					var _p12 = _elm_lang$core$String$toInt(model.newScoreValue);
-					if (_p12.ctor === 'Ok') {
-						var _p13 = _p12._0;
-						return (_elm_lang$core$Native_Utils.cmp(_p13, 0) > 0) ? _elm_lang$core$Native_Utils.update(
+					var _p15 = _elm_lang$core$String$toInt(model.newScoreValue);
+					if (_p15.ctor === 'Ok') {
+						var _p16 = _p15._0;
+						return (_elm_lang$core$Native_Utils.cmp(_p16, 0) > 0) ? _elm_lang$core$Native_Utils.update(
 							model,
 							{
 								newScoreValue: '',
 								scoreToEdit: _elm_lang$core$Maybe$Nothing,
-								players: A2(_user$project$Main$updatePlayerScore, model, _p13)
+								players: A2(_user$project$Main$updatePlayerScore, model, _p16)
 							}) : _elm_lang$core$Native_Utils.update(
 							model,
 							{
@@ -8455,10 +8493,10 @@ var _user$project$Main$update = F2(
 			case 'InputPlayerName':
 				return _elm_lang$core$Native_Utils.update(
 					model,
-					{playerToAdd: _p11._0});
+					{playerToAdd: _p14._0});
 			case 'AddPlayer':
-				var _p14 = _elm_lang$core$String$trim(model.playerToAdd);
-				if (_p14 === '') {
+				var _p17 = _elm_lang$core$String$trim(model.playerToAdd);
+				if (_p17 === '') {
 					return model;
 				} else {
 					var newId = _elm_lang$core$List$length(model.players) + 1;
@@ -8470,7 +8508,7 @@ var _user$project$Main$update = F2(
 								A3(
 									_user$project$Main$Player,
 									newId,
-									_p14,
+									_p17,
 									_elm_lang$core$Native_List.fromArray(
 										[])),
 								model.players),
@@ -8481,7 +8519,7 @@ var _user$project$Main$update = F2(
 				var newHoles = A2(
 					_elm_lang$core$List$map,
 					function (hole) {
-						return _elm_lang$core$Native_Utils.eq(hole.order, _p11._0) ? _user$project$Main$decrementPar(hole) : hole;
+						return _elm_lang$core$Native_Utils.eq(hole.order, _p14._0) ? _user$project$Main$decrementPar(hole) : hole;
 					},
 					model.holes);
 				return _elm_lang$core$Native_Utils.update(
@@ -8491,7 +8529,7 @@ var _user$project$Main$update = F2(
 				var newHoles = A2(
 					_elm_lang$core$List$map,
 					function (hole) {
-						return _elm_lang$core$Native_Utils.eq(hole.order, _p11._0) ? _user$project$Main$incrementPar(hole) : hole;
+						return _elm_lang$core$Native_Utils.eq(hole.order, _p14._0) ? _user$project$Main$incrementPar(hole) : hole;
 					},
 					model.holes);
 				return _elm_lang$core$Native_Utils.update(
@@ -8580,8 +8618,8 @@ var _user$project$Main$renderHole = function (hole) {
 			]));
 };
 var _user$project$Main$holeList = function (model) {
-	var _p15 = _elm_lang$core$List$isEmpty(model.holes);
-	if (_p15 === true) {
+	var _p18 = _elm_lang$core$List$isEmpty(model.holes);
+	if (_p18 === true) {
 		return A2(
 			_elm_lang$html$Html$div,
 			_elm_lang$core$Native_List.fromArray(
@@ -8724,8 +8762,8 @@ var _user$project$Main$InputScoreToEdit = function (a) {
 };
 var _user$project$Main$SaveScore = {ctor: 'SaveScore'};
 var _user$project$Main$renderScoreEditForm = function (model) {
-	var _p16 = model.scoreToEdit;
-	if (_p16.ctor === 'Nothing') {
+	var _p19 = model.scoreToEdit;
+	if (_p19.ctor === 'Nothing') {
 		return A2(
 			_elm_lang$html$Html$div,
 			_elm_lang$core$Native_List.fromArray(
@@ -8733,7 +8771,7 @@ var _user$project$Main$renderScoreEditForm = function (model) {
 			_elm_lang$core$Native_List.fromArray(
 				[]));
 	} else {
-		var _p17 = _p16._0._0;
+		var _p20 = _p19._0._0;
 		return A2(
 			_elm_lang$html$Html$div,
 			_elm_lang$core$Native_List.fromArray(
@@ -8793,7 +8831,7 @@ var _user$project$Main$renderScoreEditForm = function (model) {
 														]),
 													_elm_lang$core$Native_List.fromArray(
 														[
-															_elm_lang$html$Html$text(_p17.name)
+															_elm_lang$html$Html$text(_p20.name)
 														])),
 													A2(
 													_elm_lang$html$Html$input,
@@ -8803,7 +8841,7 @@ var _user$project$Main$renderScoreEditForm = function (model) {
 															_elm_lang$html$Html_Events$onInput(_user$project$Main$InputScoreToEdit),
 															_elm_lang$html$Html_Attributes$type$('text'),
 															_elm_lang$html$Html_Attributes$placeholder(
-															A2(_user$project$Main$scoreForHole, _p16._0._1, _p17))
+															A2(_user$project$Main$scoreForHole, _p19._0._1, _p20))
 														]),
 													_elm_lang$core$Native_List.fromArray(
 														[])),
@@ -8848,8 +8886,9 @@ var _user$project$Main$scoreCell = F3(
 					return _elm_lang$core$Native_Utils.eq(tr.holeId, hole.order);
 				},
 				player.results));
-		var _p18 = throwResult;
-		if (_p18.ctor === 'Just') {
+		var _p21 = throwResult;
+		if (_p21.ctor === 'Just') {
+			var _p22 = _p21._0;
 			return A2(
 				_elm_lang$html$Html$td,
 				_elm_lang$core$Native_List.fromArray(
@@ -8861,7 +8900,16 @@ var _user$project$Main$scoreCell = F3(
 				_elm_lang$core$Native_List.fromArray(
 					[
 						_elm_lang$html$Html$text(
-						_elm_lang$core$Basics$toString(_p18._0.$throws - hole.par))
+						A2(
+							_elm_lang$core$Basics_ops['++'],
+							_elm_lang$core$Basics$toString(_p22.$throws),
+							A2(
+								_elm_lang$core$Basics_ops['++'],
+								' (',
+								A2(
+									_elm_lang$core$Basics_ops['++'],
+									_user$project$Main$toStringScore(_p22.$throws - hole.par),
+									')'))))
 					]));
 		} else {
 			return A2(
@@ -8904,7 +8952,7 @@ var _user$project$Main$renderPlayer = F3(
 							_elm_lang$core$Native_List.fromArray(
 								[
 									_elm_lang$html$Html$text(
-									_elm_lang$core$Basics$toString(
+									_user$project$Main$totalScoreString(
 										A2(_user$project$Main$calculateTotal, player, holes)))
 								])),
 						lst);
@@ -9108,8 +9156,8 @@ var _user$project$Main$createCourseView = function (model) {
 			]));
 };
 var _user$project$Main$mainView = function (model) {
-	var _p19 = model.gameView;
-	if (_p19 === true) {
+	var _p23 = model.gameView;
+	if (_p23 === true) {
 		return A2(
 			_elm_lang$html$Html$div,
 			_elm_lang$core$Native_List.fromArray(
