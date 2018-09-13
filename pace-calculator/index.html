@@ -18,7 +18,7 @@
         </div>
     </nav>
     <div class="container main-content">
-        <div class="row">
+        <div class="row card">
             <div class="col s12 m12 event-form">
                 <div class="row">
                     <div class="col s3">
@@ -52,16 +52,14 @@
             </div>
         </div>
 
-        <div class="divider"></div>
-
-        <div class="row">
+        <div class="row card">
             <div class="col s12 m12 event-form">
                 <div class="row">
                     <div class="col s3">
                             <h4 class="col s12 m12">Bike</h4>
                     </div>
                     <div class="input-field inline col s3">
-                            <input type="number" placeholder="00" id="bike_distance" type="text" class="validate" min="0">
+                            <input type="number" placeholder="00" id="bike_distance" type="text" class="validate" min="0" step="0.01">
                             <label for="bike_distance">Distance in kilometer</label>
                     </div>
                     <div class="input-field inline col s1">
@@ -88,16 +86,15 @@
             </div>
         </div>
 
-        <div class="divider"></div>
 
-        <div class="row">
-            <div class="col s12 m12 event-form">
+        <div class="row card">
+            <div class="col s12 m12 event-form ">
                 <div class="row">
                     <div class="col s3">
                             <h4 class="col s12 m12">Run</h4>
                     </div>
                     <div class="input-field inline col s3">
-                            <input type="number" placeholder="00" id="run_distance" type="text" class="validate" min="0">
+                            <input type="number" placeholder="00" id="run_distance" type="text" class="validate" min="0" step="0.01">
                             <label for="run_distance">Distance in kilometer</label>
                     </div>
                     <div class="input-field inline col s1">
@@ -124,7 +121,6 @@
             </div>
         </div>
 
-        <div class="divider"></div>
     </div>
 
 <script src="app.js"></script>    
